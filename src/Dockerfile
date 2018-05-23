@@ -117,14 +117,16 @@ EXPOSE 1883
 EXPOSE 61613
 
 # Expose some outstanding folders
-VOLUME ["/var/lib/artemis/data"]
-VOLUME ["/var/lib/artemis/tmp"]
-VOLUME ["/var/lib/artemis/etc"]
+USER root
+#VOLUME ["/var/lib/artemis/data"]
+#VOLUME ["/var/lib/artemis/tmp"]
+#VOLUME ["/var/lib/artemis/etc"]
 VOLUME ["/var/lib/artemis/etc-override"]
 
+RUN chgrp -R 0 /var/lib/artemis
+RUN chmod -R g=u /var/lib/artemis
 WORKDIR /var/lib/artemis/bin
 
-USER artemis
 
 COPY assets/docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
