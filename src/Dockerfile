@@ -93,6 +93,7 @@ COPY --from=builder "/opt/apache-artemis-${ACTIVEMQ_ARTEMIS_VERSION}" "/opt/apac
 COPY --from=builder "/var/lib/artemis" "/var/lib/artemis"
 
 RUN ln -s "/opt/apache-artemis-${ACTIVEMQ_ARTEMIS_VERSION}" /opt/apache-artemis && chmod 755 /opt/apache-artemis
+COPY assets/etc/* /var/lib/artemis/etc/
 RUN chown -R artemis.artemis /var/lib/artemis
 
 RUN mkdir -p /opt/assets
@@ -116,7 +117,6 @@ EXPOSE 1883
 #Port for STOMP
 EXPOSE 61613
 
-COPY assets/etc/* /var/lib/artemis/etc/
 # Expose some outstanding folders
 USER root
 #VOLUME ["/var/lib/artemis/data"]
