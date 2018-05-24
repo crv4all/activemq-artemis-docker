@@ -1,0 +1,202 @@
+<configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+    <jms xmlns="urn:activemq:jms">
+        <queue name="DLQ"></queue>
+        <queue name="ExpiryQueue"></queue>
+        <queue name="ExpiryQueue"/>
+        <queue name="breedingBackendQueue"/>
+        <queue name="fertilityQueue"/>
+        <queue name="meldQueue"/>
+        <queue name="amisQueue"/>
+        <queue name="internalIrisAdapterQueue"/>
+        <queue name="internalBGIComputationQueue"/>
+        <queue name="internalCrvServiceDomainQueue"/>
+        <queue name="domainEventsQueue"/>
+        <queue name="domainEvents.housingDomainQueue"/>
+        <queue name="domainEvents.fertilityDomainQueue"/>
+        <queue name="domainEvents.breedingDomainQueue"/>
+        <queue name="domainEvents.customerDomainQueue"/>
+        <queue name="domainEvents.mandateCatalogQueue"/>
+        <queue name="domainEvents.irisAdapterQueue"/>
+        <queue name="domainEvents.favvDomainQueue"/>
+        <queue name="domainEvents.rvoDomainQueue"/>
+        <queue name="domainEvents.meldDomainQueue"/>
+        <queue name="domainEvents.milkDomainQueue"/>
+        <queue name="domainEvents.crvServiceDomainQueue"/>
+        <queue name="irisMigrationQueue"/>
+        <queue name="notificationsQueue"/>
+        <topic name="genomicTests"/>
+    </jms>
+    <core xmlns="urn:activemq:core">
+        <name>0.0.0.0</name>
+        <persistence-enabled>true</persistence-enabled>
+        <journal-type>ASYNCIO</journal-type>
+        <paging-directory>./data/paging</paging-directory>
+        <bindings-directory>./data/bindings</bindings-directory>
+        <journal-directory>./data/journal</journal-directory>
+        <large-messages-directory>./data/large-messages</large-messages-directory>
+        <journal-datasync>true</journal-datasync>
+        <journal-min-files>2</journal-min-files>
+        <journal-pool-files>-1</journal-pool-files>
+        <journal-buffer-timeout>1280000</journal-buffer-timeout>
+        <disk-scan-period>5000</disk-scan-period>
+        <max-disk-usage>90</max-disk-usage>
+        <global-max-size>104857600</global-max-size>
+        <acceptors>
+            <acceptor name="artemis">tcp://0.0.0.0:61616?tcpSendBufferSize=1048576;tcpReceiveBufferSize=1048576;protocols=CORE,AMQP,STOMP,HORNETQ,MQTT,OPENWIRE</acceptor>
+            <acceptor name="amqp">tcp://0.0.0.0:5672?protocols=AMQP</acceptor>
+            <acceptor name="stomp">tcp://0.0.0.0:61613?protocols=STOMP</acceptor>
+            <acceptor name="hornetq">tcp://0.0.0.0:5445?protocols=HORNETQ,STOMP</acceptor>
+            <acceptor name="mqtt">tcp://0.0.0.0:1883?protocols=MQTT</acceptor>
+        </acceptors>
+
+        <diverts>
+            <divert name="domainEvents.housingDomainQueue">
+                <address>jms.queue.domainEventsQueue</address>
+                <forwarding-address>jms.queue.domainEvents.housingDomainQueue</forwarding-address>
+                <exclusive>true</exclusive>
+            </divert>
+            <divert name="domainEvents.fertilityDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.fertilityDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.breedingDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.breedingDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.customerDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.customerDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.mandateCatalogQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.mandateCatalogQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.irisAdapterQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.irisAdapterQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.favvDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.favvDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.rvoDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.rvoDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.meldDomainQueue">
+                <address>jms.queue.domainEvents.meldDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.meldDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.milkDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.milkDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+            <divert name="domainEvents.crvServiceDomainQueue">
+                <address>jms.queue.domainEvents.housingDomainQueue</address>
+                <forwarding-address>jms.queue.domainEvents.crvServiceDomainQueue</forwarding-address>
+                <exclusive>false</exclusive>
+            </divert>
+        </diverts>
+
+        <security-settings>
+            <security-setting match="#">
+                <permission type="createNonDurableQueue" roles="amq, admin"></permission>
+                <permission type="deleteNonDurableQueue" roles="amq, admin"></permission>
+                <permission type="createDurableQueue" roles="amq,admin"></permission>
+                <permission type="deleteDurableQueue" roles="amq,admin"></permission>
+                <permission type="consume" roles="amq,admin"></permission>
+                <permission type="browse" roles="amq,admin"></permission>
+                <permission type="send" roles="amq,admin"></permission>
+                <permission type="manage" roles="amq,admin"></permission>
+            </security-setting>
+        </security-settings>
+        <address-settings>
+            <address-setting match="jms.topic.genomicTests">
+                <max-delivery-attempts>-1</max-delivery-attempts>
+                <redelivery-delay>5000</redelivery-delay>
+                <redelivery-delay-multiplier>1.5</redelivery-delay-multiplier>
+                <max-redelivery-delay>50000</max-redelivery-delay>
+                <max-size-bytes>-1</max-size-bytes>
+                <address-full-policy>PAGE</address-full-policy>
+                <page-max-cache-size>1000</page-max-cache-size>
+                <page-size-bytes>5000000</page-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+            <address-setting match="jms.queue.meldQueue">
+                <max-delivery-attempts>-1</max-delivery-attempts>
+                <redelivery-delay>0</redelivery-delay>
+                <max-size-bytes>-1</max-size-bytes>
+                <address-full-policy>PAGE</address-full-policy>
+                <page-max-cache-size>1000</page-max-cache-size>
+                <page-size-bytes>5000000</page-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+            <address-setting match="jms.queue.amisQueue">
+                <max-delivery-attempts>-1</max-delivery-attempts>
+                <redelivery-delay>5000</redelivery-delay>
+                <redelivery-delay-multiplier>1.5</redelivery-delay-multiplier>
+                <max-redelivery-delay>50000</max-redelivery-delay>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+            <address-setting match="jms.queue.domainEvents#">
+                <max-delivery-attempts>-1</max-delivery-attempts>
+                <redelivery-delay>0</redelivery-delay>
+                <max-size-bytes>-1</max-size-bytes>
+                <address-full-policy>PAGE</address-full-policy>
+                <page-max-cache-size>1000</page-max-cache-size>
+                <page-size-bytes>5000000</page-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+            <address-setting match="jms.queue.irisMigrationQueue">
+                <max-delivery-attempts>-1</max-delivery-attempts>
+                <redelivery-delay>5000</redelivery-delay>
+                <redelivery-delay-multiplier>1.5</redelivery-delay-multiplier>
+                <max-redelivery-delay>50000</max-redelivery-delay>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+            <address-setting match="jms.queue.internalCrvServiceDomainQueue">
+                <max-delivery-attempts>-1</max-delivery-attempts>
+                <redelivery-delay>0</redelivery-delay>
+                <max-size-bytes>-1</max-size-bytes>
+                <address-full-policy>PAGE</address-full-policy>
+                <page-max-cache-size>1000</page-max-cache-size>
+                <page-size-bytes>5000000</page-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+            <!--default for catch all-->
+            <address-setting match="#">
+                <redelivery-delay>0</redelivery-delay>
+                <max-delivery-attempts>1</max-delivery-attempts>
+                <max-size-bytes>10485760</max-size-bytes>
+                <message-counter-history-day-limit>10</message-counter-history-day-limit>
+                <address-full-policy>PAGE</address-full-policy>
+                <page-max-cache-size>1000</page-max-cache-size>
+                <page-size-bytes>5000000</page-size-bytes>
+                <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+                <expiry-address>jms.queue.ExpiryQueue</expiry-address>
+                <auto-delete-jms-queues>false</auto-delete-jms-queues>
+                <auto-delete-jms-topics>false</auto-delete-jms-topics>
+            </address-setting>
+        </address-settings>
+    </core>
+</configuration>

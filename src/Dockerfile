@@ -116,12 +116,13 @@ EXPOSE 1883
 #Port for STOMP
 EXPOSE 61613
 
+COPY assets/etc/* /var/lib/artemis/etc/
 # Expose some outstanding folders
 USER root
 #VOLUME ["/var/lib/artemis/data"]
 #VOLUME ["/var/lib/artemis/tmp"]
 #VOLUME ["/var/lib/artemis/etc"]
-VOLUME ["/var/lib/artemis/etc-override"]
+#VOLUME ["/var/lib/artemis/etc-override"]
 
 RUN chgrp -R 0 /var/lib/artemis
 RUN chmod -R g=u /var/lib/artemis
